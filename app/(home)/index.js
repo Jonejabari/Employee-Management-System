@@ -7,9 +7,14 @@ import {
   Ionicons,
   Octicons,
   MaterialCommunityIcons,
+  MaterialIcons,
 } from "@expo/vector-icons";
 
+import { useRouter } from "expo-router";
+
+
 const index = () => {
+  const router = useRouter();
   return (
     <ScrollView>
       <LinearGradient colors={["#7F7FD5", "#E9E4F0"]} style={{ flex: 1 }}>
@@ -37,6 +42,7 @@ const index = () => {
             }}
           >
             <Pressable
+            onPress={() => router.push("/(home)/employees")}
               style={{
                 flex: 1,
                 backgroundColor: "#D3CCE3",
@@ -85,7 +91,7 @@ const index = () => {
                 <Ionicons name="people-sharp" size={24} color="black" />
               </View>
               <Text style={{ marginTop: 7, fontWeight: "600" }}>
-                Mark Attenadance
+                Mark Attendance
               </Text>
             </Pressable>
           </View>
@@ -130,7 +136,7 @@ const index = () => {
                   flex: 1,
                 }}
               >
-                Attenadance Report
+                Attendance Report
               </Text>
               <View
                 style={{
@@ -287,24 +293,127 @@ const index = () => {
               </View>
             </Pressable>
           </View>
-          <View>
+          <View
+            style={{
+              marginTop: 20,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
             <View
               style={{
-                width: 35,
-                height: 35,
-                backgroundColor: "white",
-                borderRadius: 7,
+                backgroundColor: "#f79d00",
+                borderRadius: 6,
+                flex: 1,
+                padding: 12,
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <MaterialCommunityIcons
-                name="guy-fawkes-mask"
-                size={24}
-                color="black"
-              />
+              <View
+                style={{
+                  width: 35,
+                  height: 35,
+                  backgroundColor: "white",
+                  borderRadius: 7,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="guy-fawkes-mask"
+                  size={24}
+                  color="black"
+                />
+              </View>
+              <Text style={{ marginTop: 7 }}>Attendance Criteria</Text>
             </View>
-            <Text>Attenadance Criteria</Text>
+            <View
+              style={{
+                backgroundColor: "#ABCABA",
+                borderRadius: 6,
+                flex: 1,
+                padding: 12,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <View
+                style={{
+                  width: 35,
+                  height: 35,
+                  backgroundColor: "white",
+                  borderRadius: 7,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Feather name="bar-chart" size={24} color="black" />
+              </View>
+              <Text style={{ marginTop: 7 }}>Increased Workflow</Text>
+            </View>
+          </View>
+          <View
+            style={{
+              marginTop: 20,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#D3CCE3",
+                borderRadius: 6,
+                flex: 1,
+                padding: 12,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <View
+                style={{
+                  width: 35,
+                  height: 35,
+                  backgroundColor: "white",
+                  borderRadius: 7,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="guy-fawkes-mask"
+                  size={24}
+                  color="black"
+                />
+              </View>
+              <Text style={{ marginTop: 7 }}>Cost Savings</Text>
+            </View>
+            <View
+              style={{
+                backgroundColor: "#bdc3c7",
+                borderRadius: 6,
+                flex: 1,
+                padding: 12,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <View
+                style={{
+                  width: 35,
+                  height: 35,
+                  backgroundColor: "white",
+                  borderRadius: 7,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Feather name="bar-chart" size={24} color="black" />
+              </View>
+              <Text style={{ marginTop: 7 }}>Performance</Text>
+            </View>
           </View>
         </View>
       </LinearGradient>
