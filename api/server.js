@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Employee = require("./models/employeeModel");
 const Attandance = require("./models/attendanceModel");
 
+
 const app = express();
 const port = 5000;
 const cors = require("cors");
@@ -11,6 +12,7 @@ app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 
 mongoose
   .connect("mongodb+srv://jone:jone@cluster0.gsiqie4.mongodb.net/", {
@@ -71,8 +73,8 @@ app.post("/addEmployee", async (req, res) => {
 
 app.get("/employees", async (req, res) => {
   try {
-    const employes = await Employee.find();
-    res.status(200).json(employes);
+    const employees = await Employee.find();
+    res.status(200).json(employees);
   } catch (error) {
     res.status(500).json({ message: "failed to get all employees" });
   }
