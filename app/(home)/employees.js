@@ -1,9 +1,13 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
+import { Ionicons, Feather, FontAwesome } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 const employees = () => {
   const [employees, setEmployees] = useState([]);
+  const [input, setInput] = useState("");
+  const router = useRouter();
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
@@ -17,8 +21,52 @@ const employees = () => {
   }, []);
   console.log(employees);
   return (
-    <View>
-      <Text>employees</Text>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          backgroundColor: "white",
+        }}
+      >
+        <Ionicons
+          style={{ marginLeft: 10 }}
+          name="arrow-back"
+          size={24}
+          color="black"
+        />
+        <Pressable
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginHorizontal: 7,
+            gap: 10,
+            backgroundColor: "white",
+            height: 40,
+            borderRadius: 4,
+          }}
+        >
+          <Feather name="search" size={20} color="black" />
+          <TextInput
+            value={input}
+            onChange={(text) => setInput(text)}
+            style={{ flex: 1 }}
+            placeholder="Search"
+          />
+
+          {employees.length > 0 && (
+            <View>
+              <Pressable>
+                <FontAwesome name="plus-circle" size={24} color="black" />
+              </Pressable>
+            </View>
+          )}
+        </Pressable>
+      </View>
+       
+      <Pressable onPress={() => router.push("/(home)/adddetails")}>
+        <FontAwesome name="plus-circle" size={24} color="#0072b1" />
+      </Pressable>
     </View>
   );
 };
