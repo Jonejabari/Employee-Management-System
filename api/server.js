@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const Employee = require("./models/employeeModel");
 const Attandance = require("./models/attendanceModel");
-
+const moment = require("moment");
 
 const app = express();
 const port = 5000;
@@ -12,7 +12,6 @@ app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 
 mongoose
   .connect("mongodb+srv://jone:jone@cluster0.gsiqie4.mongodb.net/", {
@@ -77,5 +76,135 @@ app.get("/employees", async (req, res) => {
     res.status(200).json(employees);
   } catch (error) {
     res.status(500).json({ message: "failed to get all employees" });
+  }
+});
+
+app.post("/attendance", async (req, res) => {
+  try {
+    const { employeeId, employeeName, date, status } = req.body;
+
+    const existingAttendance = await Attandance.findOne({ employeeId, date });
+
+    if (existingAttendance) {
+      existingAttendance.status = status;
+      await existingAttendance.save();
+      res.status(200).json(existingAttendance);
+    } else {
+      const newAttendance = new Attandance({
+        employeeId,
+        employeeName,
+        date,
+        status,
+      });
+      await newAttendance.save();
+      res.status(200).json(newAttendance);
+    }
+  } catch (error) {
+    res.status(500).json({ messages: "Error submitting attendance" });
+  }
+});
+
+app.get("/attendance", async (req, res) => {
+  try {
+    const { date } = req.query;
+
+    const attendanceData = await Attandance.find({ date: date });
+    res.status(200).json(attendanceData);
+  } catch (error) {
+    res.status(500).json({ messages: "Error fetching Attendance" });
+  }
+});
+
+app.get("/attendance-report-all-employees", async (re, req) => {
+  try {
+    const { month, year } = req.body;
+
+    console.log("query parameters: ", month, year);
+
+    const startDate = moment(`${year}-${month}-01`, "YYYY-MM-DD")
+      .startOf("month")
+      .toDate();
+    const endDate = moment(startDate).endOf("month").toDate;
+
+    const report = await Attandance.aggregate([
+      {
+        $match: {
+          $expr: {
+            $and: [
+              {
+                $eq: [
+                  {
+                    $month: { $dateFromString: { dateString: "$date" } },
+                  },
+                  parseInt(req.query.month),
+                ],
+              },
+              {
+                $eq: [
+                  {
+                    $month: { $dateFromString: { dateString: "$date" } },
+                  },
+                  parseInt(req.query.year),
+                ],
+              },
+            ],
+          },
+        },
+      },
+
+      {
+        $group: {
+          _id: "$employeeId",
+          present: {
+            $sum: {
+              $cond: { if: { $eq: ["status", "present"] }, then: 1, else: 0 },
+            },
+          },
+          absent: {
+            $sum: {
+              $cond: { if: { $eq: ["status", "absent"] }, then: 1, else: 0 },
+            },
+          },
+          halfday: {
+            $sum: {
+              $cond: { if: { $eq: ["status", "absent"] }, then: 1, else: 0 },
+            },
+          },
+          holiday: {
+            $sum: {
+              $cond: { if: { $eq: ["status", "absent"] }, then: 1, else: 0 },
+            },
+          },
+        },
+      },
+
+      {
+        $lookup: {
+          from: "employees", // name of the employee collection
+          localField: "_id",
+          foreignField: "employeeId",
+          as: "employeedetails",
+        },
+      },
+      {
+        $unwind: "$employeeDetails", // Unwind the employeeDetails array
+      },
+      {
+        $project: {
+          _id: 1,
+          present: 1,
+          absent: 1,
+          halfday: 1,
+          name: "$employeeDetails.employeeName",
+          designation: "$employeeDetails.designation",
+          salary: "$employeeDetails.salary",
+          employeeId: "$employeeDetails.employeeId",
+        },
+      },
+
+      res.status(200).json({ report }),
+    ]);
+  } catch (error) {
+    res.status(500).json({ messages: "Error fetching summary report" });
   }
 });

@@ -25,15 +25,15 @@ const adddetails = () => {
       employeeId: employeeId,
       designation: designation,
       phoneNumber: mobileNo,
-      dateOfbirth: dob,
+      dateOfBirth: dob,
       joiningDate: joiningDate,
-      aciveEmployee: true,
+      activeEmployee: true,
       salary: salary,
       address: address,
     };
 
     axios
-      .post("http://localhost:5000/addEmployee", employeeData)
+      .post("http://192.168.43.99:5000/addEmployee", employeeData)
       .then((response) => {
         Alert.alert("Registration Successfully", "You have registered");
         setName("");
@@ -226,7 +226,7 @@ const adddetails = () => {
         </View>
 
         <Pressable
-        onPress={handleRegister}
+          onPress={handleRegister}
           style={{
             backgroundColor: "#ABCABA",
             padding: 10,
