@@ -115,7 +115,7 @@ app.get("/attendance", async (req, res) => {
   }
 });
 
-app.get("/attendance-report-all-employees", async (re, req) => {
+app.get("/attendance-report-all-employees", async (req, res) => {
   try {
     const { month, year } = req.body;
 
@@ -205,6 +205,7 @@ app.get("/attendance-report-all-employees", async (re, req) => {
       res.status(200).json({ report }),
     ]);
   } catch (error) {
-    res.status(500).json({ messages: "Error fetching summary report" });
+    console.error(error); // Log the error for debugging purposes
+    res.status(500).json({ messages: "Error fetching summary report" });   
   }
 });

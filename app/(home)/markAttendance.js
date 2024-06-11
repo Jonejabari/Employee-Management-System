@@ -51,6 +51,17 @@ const markAttendance = () => {
   useEffect(() => {
     fetchAttendanceData();
   }, [currentDate]);
+  const employeeWithAttendance = employees.map((employee) => {
+    const attendanceRecord = attendance.find(
+      (record) => record.employeeId === employee.employeeId
+    );
+
+    return {
+      ...employee,
+      status: attendanceRecord ? attendanceRecord.status : "",
+    };
+  });
+  // console.log(employeeWithAttendance)
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <Pressable>
@@ -80,7 +91,7 @@ const markAttendance = () => {
         </View>
 
         <View style={{ marginHorizontal: 12 }}>
-          {employees.map((item, index) => (
+          {employeeWithAttendance.map((item, index) => (
             <Pressable
               onPress={() => {
                 router.push({
@@ -116,7 +127,7 @@ const markAttendance = () => {
                   {item?.employeeName?.charAt(0)}
                 </Text>
               </View>
-              <View>
+              <View style={{flex: 1}}>
                 <Text style={{ fontSize: 16, fontWeight: "bold" }}>
                   {item?.employeeName}
                 </Text>
@@ -124,6 +135,25 @@ const markAttendance = () => {
                   {item?.designation} ({item?.employeeId})
                 </Text>
               </View>
+              {item?.status && (
+                <View
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 8,
+                    padding: 10,
+                    backgroundColor: "#FF69B4",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text
+                    style={{ fontSize: 16, color: "white", fontWeight: "bold" }}
+                  >
+                    {item.status.charAt(0)}
+                  </Text>
+                </View>
+              )}
             </Pressable>
           ))}
         </View>

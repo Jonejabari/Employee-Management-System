@@ -35,7 +35,7 @@ const user = () => {
     try {
       const attendanceData = {
         employeeId: params?.id,
-        employeename: params.name,
+        employeeName: params.name,
         date: currentDate.format("MMMM D, YYYY"),
         status: attendancestatus,
       };
