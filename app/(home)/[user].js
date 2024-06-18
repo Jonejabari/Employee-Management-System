@@ -40,7 +40,7 @@ const user = () => {
         status: attendancestatus,
       };
       const response = await axios.post(
-        "http://192.168.43.99:5000/attendance",
+        "http://localhost:5000/attendance",
         attendanceData
       );
 
