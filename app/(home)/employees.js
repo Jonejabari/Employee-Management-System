@@ -45,10 +45,15 @@ const employees = () => {
             backgroundColor: "white",
             height: 40,
             borderRadius: 4,
-            flex:1,
+            flex: 1,
           }}
         >
-          <Feather style={{marginLeft:10}} name="search" size={20} color="black"/>
+          <Feather
+            style={{ marginLeft: 10 }}
+            name="search"
+            size={20}
+            color="black"
+          />
           <TextInput
             value={input}
             onChange={(text) => setInput(text)}
@@ -58,8 +63,13 @@ const employees = () => {
 
           {employees.length > 0 && (
             <View>
-              <Pressable>
-                <FontAwesome name="plus-circle" size={24} color="black" />
+              <Pressable onPress={() => router.push("/(home)/adddetails")}>
+                <FontAwesome
+                  style={{ marginTop: 30 }}
+                  name="plus-circle"
+                  size={24}
+                  color="black"
+                />
               </Pressable>
             </View>
           )}
