@@ -117,67 +117,49 @@ app.get("/attendance", async (req, res) => {
 
 app.get("/attendance-report-all-employees", async (req, res) => {
   try {
-    const { month, year } = req.body;
+    const { month, year } = req.query; // Using query parameters
 
     console.log("query parameters: ", month, year);
 
     const startDate = moment(`${year}-${month}-01`, "YYYY-MM-DD")
       .startOf("month")
       .toDate();
-    const endDate = moment(startDate).endOf("month").toDate;
+    const endDate = moment(startDate).endOf("month").toDate(); // Fixed toDate()
 
     const report = await Attandance.aggregate([
       {
         $match: {
-          $expr: {
-            $and: [
-              {
-                $eq: [
-                  {
-                    $month: { $dateFromString: { dateString: "$date" } },
-                  },
-                  parseInt(req.query.month),
-                ],
-              },
-              {
-                $eq: [
-                  {
-                    $month: { $dateFromString: { dateString: "$date" } },
-                  },
-                  parseInt(req.query.year),
-                ],
-              },
-            ],
+          date: {
+            $gte: startDate,
+            $lte: endDate,
           },
         },
       },
-
       {
         $group: {
           _id: "$employeeId",
           present: {
             $sum: {
-              $cond: { if: { $eq: ["status", "present"] }, then: 1, else: 0 },
+              $cond: { if: { $eq: ["$status", "present"] }, then: 1, else: 0 },
             },
           },
           absent: {
             $sum: {
-              $cond: { if: { $eq: ["status", "absent"] }, then: 1, else: 0 },
+              $cond: { if: { $eq: ["$status", "absent"] }, then: 1, else: 0 },
             },
           },
           halfday: {
             $sum: {
-              $cond: { if: { $eq: ["status", "absent"] }, then: 1, else: 0 },
+              $cond: { if: { $eq: ["$status", "halfday"] }, then: 1, else: 0 },
             },
           },
           holiday: {
             $sum: {
-              $cond: { if: { $eq: ["status", "absent"] }, then: 1, else: 0 },
+              $cond: { if: { $eq: ["$status", "holiday"] }, then: 1, else: 0 },
             },
           },
         },
       },
-
       {
         $lookup: {
           from: "employees", // name of the employee collection
@@ -187,7 +169,7 @@ app.get("/attendance-report-all-employees", async (req, res) => {
         },
       },
       {
-        $unwind: "$employeeDetails", // Unwind the employeeDetails array
+        $unwind: "$employeedetails", // Unwind the employeedetails array
       },
       {
         $project: {
@@ -195,17 +177,18 @@ app.get("/attendance-report-all-employees", async (req, res) => {
           present: 1,
           absent: 1,
           halfday: 1,
-          name: "$employeeDetails.employeeName",
-          designation: "$employeeDetails.designation",
-          salary: "$employeeDetails.salary",
-          employeeId: "$employeeDetails.employeeId",
+          holiday: 1,
+          name: "$employeedetails.employeeName",
+          designation: "$employeedetails.designation",
+          salary: "$employeedetails.salary",
+          employeeId: "$employeedetails.employeeId",
         },
       },
-
-      res.status(200).json({ report }),
     ]);
+
+    res.status(200).json({ report });
   } catch (error) {
     console.error(error); // Log the error for debugging purposes
-    res.status(500).json({ messages: "Error fetching summary report" });   
+    res.status(500).json({ messages: "Error fetching summary report" });
   }
 });

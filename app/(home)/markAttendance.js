@@ -91,7 +91,7 @@ const markAttendance = () => {
         </View>
 
         <View style={{ marginHorizontal: 12 }}>
-          {employeeWithAttendance.map((item, index) => (
+          {employeeWithAttendance.map((item) => (
             <Pressable
               onPress={() => {
                 router.push({
@@ -104,7 +104,7 @@ const markAttendance = () => {
                   },
                 });
               }}
-              key={{ index }}
+              key={item.employeeId}
               style={{
                 flexDirection: "row",
                 alignItems: "center",
