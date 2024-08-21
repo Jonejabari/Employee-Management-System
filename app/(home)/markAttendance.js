@@ -38,7 +38,7 @@ const markAttendance = () => {
   const [attendance, setAttendance] = useState([]);
   const fetchAttendanceData = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/attendance", {
+      const response = await axios.get(`http://localhost:5000/attendance`, {
         params: {
           date: currentDate.format("MMMM D, YYYY"),
         },

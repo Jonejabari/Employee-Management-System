@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, View, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Ionicons, Feather, FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import SearchResults from "../../component/SearchResults";
 
@@ -31,6 +32,7 @@ const employees = () => {
         }}
       >
         <Ionicons
+          onPress={() => router.back()}
           style={{ marginLeft: 10 }}
           name="arrow-back"
           size={24}
@@ -43,20 +45,20 @@ const employees = () => {
             marginHorizontal: 7,
             gap: 10,
             backgroundColor: "white",
+            borderRadius: 3,
             height: 40,
-            borderRadius: 4,
             flex: 1,
           }}
         >
-          <Feather
+          <AntDesign
             style={{ marginLeft: 10 }}
-            name="search"
+            name="search1"
             size={20}
             color="black"
           />
           <TextInput
             value={input}
-            onChange={(text) => setInput(text)}
+            onChangeText={(text) => setInput(text)}
             style={{ flex: 1 }}
             placeholder="Search"
           />
@@ -64,12 +66,7 @@ const employees = () => {
           {employees.length > 0 && (
             <View>
               <Pressable onPress={() => router.push("/(home)/adddetails")}>
-                <FontAwesome
-                  style={{ marginTop: 30 }}
-                  name="plus-circle"
-                  size={24}
-                  color="black"
-                />
+                <AntDesign name="pluscircle" size={30} color="#0072b1" />
               </Pressable>
             </View>
           )}
@@ -85,9 +82,9 @@ const employees = () => {
           <Text>No Data</Text>
           <Text>Press on the plus button and add your Employee</Text>
           <Pressable onPress={() => router.push("/(home)/adddetails")}>
-            <FontAwesome
+            <AntDesign
               style={{ marginTop: 30 }}
-              name="plus-circle"
+              name="pluscircle"
               size={24}
               color="black"
             />

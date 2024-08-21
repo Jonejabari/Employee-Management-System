@@ -117,24 +117,38 @@ app.get("/attendance", async (req, res) => {
 
 app.get("/attendance-report-all-employees", async (req, res) => {
   try {
-    const { month, year } = req.query; // Using query parameters
+    const { month, year } = req.query;
 
-    console.log("query parameters: ", month, year);
-
+    console.log("Query parameters:", month, year);
+    // Calculate the start and end dates for the selected month and year
     const startDate = moment(`${year}-${month}-01`, "YYYY-MM-DD")
       .startOf("month")
       .toDate();
-    const endDate = moment(startDate).endOf("month").toDate(); // Fixed toDate()
+    const endDate = moment(startDate).endOf("month").toDate();
 
+    // Aggregate attendance data for all employees and date range
     const report = await Attandance.aggregate([
       {
         $match: {
-          date: {
-            $gte: startDate,
-            $lte: endDate,
+          $expr: {
+            $and: [
+              {
+                $eq: [
+                  { $month: { $dateFromString: { dateString: "$date" } } },
+                  parseInt(req.query.month),
+                ],
+              },
+              {
+                $eq: [
+                  { $year: { $dateFromString: { dateString: "$date" } } },
+                  parseInt(req.query.year),
+                ],
+              },
+            ],
           },
         },
       },
+
       {
         $group: {
           _id: "$employeeId",
@@ -162,14 +176,14 @@ app.get("/attendance-report-all-employees", async (req, res) => {
       },
       {
         $lookup: {
-          from: "employees", // name of the employee collection
+          from: "employees", // Name of the employee collection
           localField: "_id",
           foreignField: "employeeId",
-          as: "employeedetails",
+          as: "employeeDetails",
         },
       },
       {
-        $unwind: "$employeedetails", // Unwind the employeedetails array
+        $unwind: "$employeeDetails", // Unwind the employeeDetails array
       },
       {
         $project: {
@@ -177,18 +191,18 @@ app.get("/attendance-report-all-employees", async (req, res) => {
           present: 1,
           absent: 1,
           halfday: 1,
-          holiday: 1,
-          name: "$employeedetails.employeeName",
-          designation: "$employeedetails.designation",
-          salary: "$employeedetails.salary",
-          employeeId: "$employeedetails.employeeId",
+          name: "$employeeDetails.employeeName",
+          designation:"$employeeDetails.designation",
+          salary: "$employeeDetails.salary",
+          employeeId: "$employeeDetails.employeeId",
         },
       },
     ]);
 
     res.status(200).json({ report });
   } catch (error) {
-    console.error(error); // Log the error for debugging purposes
-    res.status(500).json({ messages: "Error fetching summary report" });
+    console.error("Error generating attendance report:", error);
+    res.status(500).json({ message: "Error generating the report" });
   }
 });
+
