@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import React from "react";
 
-const searchResults = ({ data, input, setInput }) => {
+const SearchResults = ({ data, input, setInput }) => {
   return (
     <View style={{ padding: 10 }}>
       <FlatList
@@ -23,11 +23,12 @@ const searchResults = ({ data, input, setInput }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <Text style={{color:"white", fontSize:16}}>{item?.employeeName?.charAt(0)}</Text>
+                  <Text style={{color:"white",fontSize:16}}>{item?.employeeName?.charAt(0)}</Text>
                 </View>
+
                 <View>
-                  <Text style={{fontSize:16, fontWeight:"bold"}}>{item?.employeeName}</Text>
-                  <Text style={{marginTop:5, color:"grey"}}>
+                  <Text style={{fontSize:16,fontWeight:"bold"}}>{item?.employeeName}</Text>
+                  <Text style={{marginTop:5,color:"gray"}}>
                     {item?.designation} ({item?.employeeId})
                   </Text>
                 </View>
@@ -40,6 +41,6 @@ const searchResults = ({ data, input, setInput }) => {
   );
 };
 
-export default searchResults;
+export default SearchResults;
 
 const styles = StyleSheet.create({});
