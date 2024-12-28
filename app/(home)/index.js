@@ -14,7 +14,7 @@ import { useRouter } from "expo-router";
 
 
 const index = () => {
-  const router = useRouter();
+  const router = useRouter(); 
   return (
     <ScrollView>
       <LinearGradient colors={["#7F7FD5", "#E9E4F0"]} style={{ flex: 1 }}>

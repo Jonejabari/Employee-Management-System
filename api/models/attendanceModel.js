@@ -4,7 +4,7 @@ const attandanceSchema = new mongoose.Schema({
   employeeId: {
     type: String,
     required: true,
-  },
+  }, 
   employeeName: {
     type: String,
     required: true,

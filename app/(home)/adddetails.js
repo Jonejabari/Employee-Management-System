@@ -21,7 +21,7 @@ const adddetails = () => {
   const [designation, setDesignation] = useState("");
   const handleRegister = () => {
     const employeeData = {
-      employeeName: name,
+      employeeName: name, 
       employeeId: employeeId,
       designation: designation,
       phoneNumber: mobileNo,

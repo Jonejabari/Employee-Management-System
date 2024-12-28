@@ -219,7 +219,7 @@ const user = () => {
           <TextInput
             style={{
               borderRadius: 6,
-              marginTop: 10,
+              marginTop: 10, 
               borderWidth: 2,
               borderColor: "#E0E0E0",
               padding: 10,

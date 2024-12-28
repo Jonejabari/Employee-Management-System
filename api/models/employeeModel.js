@@ -14,7 +14,7 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  joiningDate: {
+  joiningDate: { 
     type: String,
     required: true,
   },
