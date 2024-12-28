@@ -95,7 +95,7 @@ app.post("/attendance", async (req, res) => {
         employeeName,
         date,
         status,
-      });
+      }); 
       await newAttendance.save();
       res.status(200).json(newAttendance);
     }
