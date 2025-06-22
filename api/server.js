@@ -8,7 +8,7 @@ const dotenv = require("dotenv").config();
 const moment = require("moment");
 
 const app = express();
-const port = process.env.PORT || 5001;
+const port = process.env.PORT;
 const cors = require("cors");
 app.use(cors());
 
