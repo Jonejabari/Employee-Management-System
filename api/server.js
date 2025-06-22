@@ -3,31 +3,23 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const Employee = require("./models/employeeModel");
 const Attandance = require("./models/attendanceModel");
+const connectDb = require("./config/dbConnection"); 
+const dotenv = require("dotenv").config();
 const moment = require("moment");
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5001;
 const cors = require("cors");
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-mongoose
-  .connect("mongodb+srv://jone:jone@cluster0.gsiqie4.mongodb.net/", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((error) => {
-    console.log("Error connecting to MongoDB", error);
-  });
+connectDb(); 
 
 app.listen(port, () => {
-  console.log("Server is running on port 5000");
-});
+  console.log(`Server is running on port ${port}`);
+})
 
 //endpoint to register employee
 app.post("/addEmployee", async (req, res) => {
@@ -61,9 +53,9 @@ app.post("/addEmployee", async (req, res) => {
 
     res
       .status(201)
-      .json({ mesaage: "Employee saved successfully", employee: newEmployee });
+      .json({ message: "Employee saved successfully", employee: newEmployee });
   } catch (error) {
-    console.log("Error creating employeee", error);
+    console.log("Error creating employee", error);
     res.status(500).json({ message: "failed to create employee" });
   }
 });
